@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment variables / API keys
+.env
+
+# Hugging Face cache
+.cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+# Training artifacts
+emotion-model/emotion_classifier.pt
+emotion-model/emotion_features.pt
+emotion-model/test_features.pt
