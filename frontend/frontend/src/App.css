@@ -1,0 +1,1056 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: #010108;
+  color: white;
+}
+
+button,
+textarea {
+  font-family: inherit;
+}
+
+/* =====================================================
+   APP
+===================================================== */
+
+.app {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 68% 50%,
+      rgba(75, 40, 160, 0.12),
+      transparent 38%
+    );
+
+  color: white;
+}
+
+/* =====================================================
+   GALAXY OVERLAY
+===================================================== */
+
+.galaxy-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+
+  z-index: 1;
+
+  background:
+    radial-gradient(
+      ellipse at 67% 50%,
+      transparent 15%,
+      rgba(1, 1, 8, 0.08) 42%,
+      rgba(1, 1, 8, 0.6) 100%
+    );
+}
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.top-bar {
+  position: relative;
+
+  z-index: 30;
+
+  height: 76px;
+
+  padding:
+    18px 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.brand {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.brand h1 {
+  margin: 0;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #b8a7ff,
+      #75d8ff
+    );
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+.brand p {
+  margin: 3px 0 0;
+
+  font-size: 9px;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+
+  letter-spacing: 0.4px;
+}
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.brand-orbit {
+  position: relative;
+
+  width: 35px;
+  height: 35px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(164, 129, 255, 0.65);
+
+  box-shadow:
+    0 0 16px
+      rgba(130, 90, 255, 0.4),
+
+    inset 0 0 14px
+      rgba(130, 90, 255, 0.12);
+
+  animation:
+    orbitPulse 3s ease-in-out infinite;
+}
+
+.brand-orbit::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 7px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(92, 201, 255, 0.65);
+}
+
+.brand-orbit span {
+  position: absolute;
+
+  width: 6px;
+  height: 6px;
+
+  top: -2px;
+  left: 14px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  box-shadow:
+    0 0 8px white,
+    0 0 18px #8f7cff;
+
+  animation:
+    orbitSpin 4s linear infinite;
+}
+
+@keyframes orbitSpin {
+  from {
+    transform:
+      rotate(0deg)
+      translateX(13px);
+  }
+
+  to {
+    transform:
+      rotate(360deg)
+      translateX(13px);
+  }
+}
+
+@keyframes orbitPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-pill {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding:
+    7px 11px;
+
+  border-radius: 999px;
+
+  border:
+    1px solid
+    rgba(116, 255, 198, 0.18);
+
+  background:
+    rgba(20, 40, 40, 0.2);
+
+  backdrop-filter: blur(12px);
+
+  font-size: 8px;
+
+  letter-spacing: 1px;
+
+  color:
+    rgba(255, 255, 255, 0.6);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #63ffbd;
+
+  box-shadow:
+    0 0 8px #63ffbd;
+
+  animation:
+    statusBlink 2s infinite;
+}
+
+@keyframes statusBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* =====================================================
+   MAIN EXPERIENCE
+===================================================== */
+
+.experience {
+  position: relative;
+
+  z-index: 10;
+
+  width: 100%;
+
+  height:
+    calc(100vh - 76px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  padding:
+    0 38px 35px;
+}
+
+/* =====================================================
+   LEFT CHAT PANEL
+===================================================== */
+
+.chat-panel {
+  position: relative;
+
+  z-index: 20;
+
+  width: 350px;
+
+  margin-left: 10px;
+
+  transform:
+    translateY(10px);
+
+  animation:
+    panelAppear 0.8s ease;
+}
+
+@keyframes panelAppear {
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(-25px)
+      translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateX(0)
+      translateY(10px);
+  }
+}
+
+/* =====================================================
+   CHAT CARD
+===================================================== */
+
+.chat-card {
+  position: relative;
+
+  width: 100%;
+
+  border-radius: 20px;
+
+  padding: 1px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(190, 160, 255, 0.6),
+      rgba(90, 200, 255, 0.22),
+      rgba(255, 255, 255, 0.08)
+    );
+
+  box-shadow:
+    0 25px 70px
+      rgba(0, 0, 0, 0.65),
+
+    0 0 45px
+      rgba(115, 75, 220, 0.2);
+
+  backdrop-filter:
+    blur(20px);
+
+  overflow: hidden;
+
+  animation:
+    cardFloat 6s ease-in-out infinite;
+}
+
+.chat-card::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 1px;
+
+  border-radius: 19px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(10, 8, 25, 0.9),
+      rgba(7, 6, 18, 0.82)
+    );
+
+  backdrop-filter:
+    blur(22px);
+
+  z-index: -1;
+}
+
+.chat-card::before {
+  content: "";
+
+  position: absolute;
+
+  inset: -2px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(155, 110, 255, 0.35),
+      transparent 30%,
+      transparent 70%,
+      rgba(73, 206, 255, 0.25)
+    );
+
+  filter: blur(10px);
+
+  z-index: -2;
+}
+
+/* =====================================================
+   CARD GLOW
+===================================================== */
+
+.card-glow {
+  position: absolute;
+
+  width: 170px;
+  height: 70px;
+
+  top: -35px;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(135, 92, 255, 0.32),
+      transparent 70%
+    );
+
+  filter: blur(20px);
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   CHAT HEADER
+===================================================== */
+
+.chat-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding:
+    14px 16px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+}
+
+.ai-avatar {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(140, 93, 255, 0.38),
+      rgba(66, 205, 255, 0.22)
+    );
+
+  border:
+    1px solid
+    rgba(175, 145, 255, 0.35);
+
+  font-size: 17px;
+
+  box-shadow:
+    0 0 18px
+      rgba(139, 92, 246, 0.25);
+}
+
+.chat-header h3 {
+  margin: 0;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.chat-header p {
+  margin: 3px 0 0;
+
+  font-size: 8px;
+
+  color:
+    rgba(255, 255, 255, 0.4);
+}
+
+/* =====================================================
+   RESPONSE
+===================================================== */
+
+.response-area {
+  padding:
+    12px 15px 2px;
+
+  max-height: 180px;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+
+  animation:
+    responseAppear 0.5s ease;
+}
+
+.response-area::-webkit-scrollbar {
+  width: 3px;
+}
+
+.response-area::-webkit-scrollbar-thumb {
+  background:
+    rgba(160, 130, 255, 0.4);
+
+  border-radius: 10px;
+}
+
+/* =====================================================
+   EMOTION BADGE
+===================================================== */
+
+.emotion-badge {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  width: fit-content;
+
+  padding:
+    7px 10px;
+
+  border-radius: 11px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+.emotion-icon {
+  font-size: 17px;
+}
+
+.emotion-badge small {
+  display: block;
+
+  margin-bottom: 2px;
+
+  font-size: 7px;
+
+  letter-spacing: 1.4px;
+
+  color:
+    rgba(255, 255, 255, 0.38);
+}
+
+.emotion-badge strong {
+  font-size: 11px;
+
+  text-transform: capitalize;
+
+  color:
+    #d7cbff;
+}
+
+/* =====================================================
+   CONFIDENCE
+===================================================== */
+
+.confidence {
+  margin-top: 10px;
+}
+
+.confidence-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 5px;
+
+  font-size: 8px;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+}
+
+.confidence-top span:last-child {
+  color:
+    rgba(194, 179, 255, 0.8);
+}
+
+.confidence-bar {
+  width: 100%;
+
+  height: 3px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7655e8,
+      #5ddcff
+    );
+
+  box-shadow:
+    0 0 12px
+      rgba(103, 190, 255, 0.6);
+
+  transition:
+    width 0.8s ease;
+}
+
+/* =====================================================
+   AI RESPONSE
+===================================================== */
+
+.ai-message {
+  margin-top: 10px;
+
+  padding:
+    10px 12px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(115, 85, 190, 0.08);
+
+  border:
+    1px solid
+    rgba(160, 130, 255, 0.1);
+}
+
+.message-label {
+  margin-bottom: 4px;
+
+  font-size: 7px;
+
+  letter-spacing: 1.6px;
+
+  color:
+    rgba(181, 159, 255, 0.55);
+}
+
+.ai-message p {
+  margin: 0;
+
+  font-size: 10px;
+
+  line-height: 1.55;
+
+  color:
+    rgba(255, 255, 255, 0.78);
+}
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.input-area {
+  padding:
+    12px 15px 14px;
+}
+
+.input-area textarea {
+  width: 100%;
+
+  min-height: 65px;
+
+  resize: none;
+
+  outline: none;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.09);
+
+  border-radius: 12px;
+
+  padding:
+    11px 12px;
+
+  background:
+    rgba(0, 0, 0, 0.25);
+
+  color: white;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.input-area textarea::placeholder {
+  color:
+    rgba(255, 255, 255, 0.28);
+}
+
+.input-area textarea:focus {
+  border-color:
+    rgba(150, 120, 255, 0.45);
+
+  box-shadow:
+    0 0 20px
+      rgba(120, 80, 230, 0.12);
+}
+
+/* =====================================================
+   INPUT BOTTOM
+===================================================== */
+
+.input-bottom {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 7px;
+}
+
+.hint {
+  font-size: 7px;
+
+  color:
+    rgba(255, 255, 255, 0.25);
+}
+
+/* =====================================================
+   SEND
+===================================================== */
+
+.input-bottom button {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: none;
+
+  outline: none;
+
+  padding:
+    8px 13px;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  color: white;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7652dc,
+      #3d9ed6
+    );
+
+  box-shadow:
+    0 7px 20px
+      rgba(101, 74, 210, 0.3);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.input-bottom button:hover:not(:disabled) {
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 10px 25px
+      rgba(101, 74, 210, 0.5);
+}
+
+.input-bottom button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.send-icon {
+  font-size: 13px;
+}
+
+.loader {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.3);
+
+  border-top-color: white;
+
+  animation:
+    loaderSpin 0.7s linear infinite;
+}
+
+@keyframes loaderSpin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+/* =====================================================
+   UNIVERSE LABEL
+===================================================== */
+
+.universe-label {
+  position: absolute;
+
+  z-index: 12;
+
+  right: 7%;
+
+  bottom: 12%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  pointer-events: none;
+
+  text-align: right;
+
+  opacity: 0.75;
+}
+
+.universe-label span {
+  font-size: 8px;
+
+  letter-spacing: 3px;
+
+  color:
+    rgba(190, 170, 255, 0.55);
+}
+
+.universe-label strong {
+  margin-top: 4px;
+
+  font-size: 16px;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  background:
+    linear-gradient(
+      90deg,
+      #a78bfa,
+      #67e8f9
+    );
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+.universe-label small {
+  margin-top: 4px;
+
+  font-size: 7px;
+
+  letter-spacing: 1.5px;
+
+  color:
+    rgba(255, 255, 255, 0.3);
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.bottom-bar {
+  position: fixed;
+
+  z-index: 30;
+
+  bottom: 10px;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  white-space: nowrap;
+
+  font-size: 7px;
+
+  letter-spacing: 0.7px;
+
+  color:
+    rgba(255, 255, 255, 0.23);
+}
+
+.separator {
+  color:
+    rgba(180, 150, 255, 0.4);
+}
+
+/* =====================================================
+   CHAT FLOAT
+===================================================== */
+
+@keyframes cardFloat {
+  0%,
+  100% {
+    transform:
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      translateY(-4px);
+  }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 850px) {
+
+  .experience {
+    padding:
+      0 20px 50px;
+  }
+
+  .chat-panel {
+    width: 330px;
+  }
+
+  .universe-label {
+    right: 5%;
+  }
+}
+
+@media (max-width: 650px) {
+
+  .top-bar {
+    padding:
+      15px 17px;
+  }
+
+  .brand h1 {
+    font-size: 15px;
+  }
+
+  .brand p {
+    display: none;
+  }
+
+  .status-pill {
+    font-size: 7px;
+  }
+
+  .experience {
+    justify-content: center;
+
+    padding:
+      0 14px 45px;
+  }
+
+  .chat-panel {
+    width:
+      min(350px, 92vw);
+
+    margin-left: 0;
+  }
+
+  .universe-label {
+    display: none;
+  }
+
+  .bottom-bar {
+    display: none;
+  }
+}

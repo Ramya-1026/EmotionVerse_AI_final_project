@@ -22,4 +22,4 @@ Thumbs.db
 # Training artifacts
 emotion-model/emotion_classifier.pt
 emotion-model/emotion_features.pt
-emotion-model/test_features.pt
+emotion-model/test_features.ptfrontend/node_modules/
