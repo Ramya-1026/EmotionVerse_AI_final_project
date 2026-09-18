@@ -15,9 +15,7 @@ function App() {
   // Fetch emotion history separately
   const loadHistory = async () => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:8000/api/emotions/${userId}`
-      );
+      const res = await fetch(`/api/emotions/${userId}`);
 
       if (!res.ok) {
         console.error("History API error:", res.status);
@@ -26,9 +24,8 @@ function App() {
 
       const data = await res.json();
 
-      if (Array.isArray(data)) {
-        setHistory(data.history || []);
-      }
+      // Backend returns an OBJECT: { userId, history: [...] }
+      setHistory(data.history || []);
     } catch (error) {
       console.error("History fetch failed:", error);
     }
@@ -46,19 +43,16 @@ function App() {
     setResponse("");
 
     try {
-      const res = await fetch(
-        "http://127.0.0.1:8000/api/chat",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: userId,
-            message: message,
-          }),
-        }
-      );
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userId,
+          message: message,
+        }),
+      });
 
       if (!res.ok) {
         throw new Error(`Chat API error: ${res.status}`);
@@ -66,23 +60,17 @@ function App() {
 
       const data = await res.json();
 
-      // Chat response
       setEmotion(data.emotion);
       setConfidence(data.confidence);
       setResponse(data.response);
 
-      // Clear input after successful message
       setMessage("");
 
-      // History is optional.
-      // If it fails, chat result will still remain successful.
       loadHistory();
     } catch (error) {
       console.error("Chat error:", error);
 
-      setResponse(
-        "Backend connection failed. Please try again."
-      );
+      setResponse("Backend connection failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -116,6 +104,7 @@ function App() {
     }
   };
 
+  // Format in India Standard Time (Asia/Kolkata)
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "";
 
@@ -125,15 +114,20 @@ function App() {
       return String(timestamp);
     }
 
-    return date.toLocaleString();
+    return date.toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
   };
 
   return (
     <div className="app">
-      <EmotionUniverse
-        key={emotion || "neutral"}
-        emotion={emotion}
-      />
+      <EmotionUniverse key={emotion || "neutral"} emotion={emotion} />
 
       <div className="galaxy-overlay"></div>
 
@@ -165,9 +159,7 @@ function App() {
 
               <div>
                 <h3>EmotionVerse Companion</h3>
-                <p>
-                  Understanding you, one message at a time
-                </p>
+                <p>Understanding you, one message at a time</p>
               </div>
             </div>
 
@@ -189,9 +181,7 @@ function App() {
                     <div className="confidence-top">
                       <span>Confidence</span>
 
-                      <span>
-                        {(confidence * 100).toFixed(1)}%
-                      </span>
+                      <span>{(confidence * 100).toFixed(1)}%</span>
                     </div>
 
                     <div className="confidence-bar">
@@ -206,9 +196,7 @@ function App() {
                 )}
 
                 <div className="ai-message">
-                  <div className="message-label">
-                    AI RESPONSE
-                  </div>
+                  <div className="message-label">AI RESPONSE</div>
 
                   <p>{response}</p>
                 </div>
@@ -225,9 +213,7 @@ function App() {
               />
 
               <div className="input-bottom">
-                <span className="hint">
-                  Enter to send
-                </span>
+                <span className="hint">Enter to send</span>
 
                 <button
                   type="button"
@@ -254,88 +240,150 @@ function App() {
               <div
                 style={{
                   marginTop: "16px",
-                  padding: "14px",
-                  borderTop:
-                    "1px solid rgba(255,255,255,0.08)",
+                  paddingTop: "14px",
+                  borderTop: "1px solid rgba(255,255,255,0.08)",
                 }}
               >
+                {/* Pinned title */}
                 <div
                   style={{
-                    fontSize: "10px",
+                    fontSize: "11px",
                     letterSpacing: "2px",
-                    color:
-                      "rgba(255,255,255,0.45)",
+                    color: "rgba(255,255,255,0.5)",
                     marginBottom: "10px",
                   }}
                 >
                   LONG-TERM EMOTION MEMORY
                 </div>
 
-                {history
-                  .slice()
-                  .reverse()
-                  .slice(0, 5)
-                  .map((item, index) => (
-                    <div
-                      key={item._id || index}
-                      style={{
-                        padding: "9px 10px",
-                        marginBottom: "7px",
-                        borderRadius: "10px",
-                        background:
-                          "rgba(255,255,255,0.035)",
-                        border:
-                          "1px solid rgba(255,255,255,0.06)",
-                      }}
-                    >
+                {/* Scrollable list — keeps the chat input visible */}
+                <div
+                  style={{
+                    maxHeight: "340px",
+                    overflowY: "auto",
+                    paddingRight: "4px",
+                  }}
+                >
+                  {history
+                    .slice()
+                    .map((item, index) => (
                       <div
+                        key={item._id || index}
                         style={{
-                          display: "flex",
-                          justifyContent:
-                            "space-between",
-                          alignItems: "center",
-                          gap: "8px",
+                          padding: "12px 13px",
+                          marginBottom: "9px",
+                          borderRadius: "10px",
+                          background: "rgba(255,255,255,0.035)",
+                          border: "1px solid rgba(255,255,255,0.06)",
                         }}
                       >
-                        <span
-                          style={{
-                            fontSize: "11px",
-                            fontWeight: "600",
-                          }}
-                        >
-                          {getEmotionEmoji(
-                            item.emotion
-                          )}{" "}
-                          {item.emotion}
-                        </span>
-
-                        <span
-                          style={{
-                            fontSize: "9px",
-                            color:
-                              "rgba(255,255,255,0.4)",
-                          }}
-                        >
-                          {formatTimestamp(
-                            item.timestamp
-                          )}
-                        </span>
-                      </div>
-
-                      {item.message && (
+                        {/* Row 1: emotion + timestamp */}
                         <div
                           style={{
-                            marginTop: "5px",
-                            fontSize: "10px",
-                            color:
-                              "rgba(255,255,255,0.6)",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            gap: "8px",
                           }}
                         >
-                          {item.message}
+                          <span
+                            style={{
+                              fontSize: "12px",
+                              fontWeight: "600",
+                            }}
+                          >
+                            {getEmotionEmoji(item.emotion)} {item.emotion}
+                          </span>
+
+                          <span
+                            style={{
+                              fontSize: "10px",
+                              color: "rgba(255,255,255,0.45)",
+                            }}
+                          >
+                            {formatTimestamp(item.timestamp)}
+                          </span>
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        {/* Row 2: user message */}
+                        {item.message && (
+                          <div
+                            style={{
+                              marginTop: "7px",
+                              fontSize: "12px",
+                              color: "rgba(255,255,255,0.7)",
+                            }}
+                          >
+                            {item.message}
+                          </div>
+                        )}
+
+                        {/* Row 3: confidence bar */}
+                        {typeof item.confidence === "number" && (
+                          <div style={{ marginTop: "8px" }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: "10px",
+                                color: "rgba(255,255,255,0.45)",
+                                marginBottom: "3px",
+                              }}
+                            >
+                              <span>Confidence</span>
+                              <span>
+                                {(item.confidence * 100).toFixed(1)}%
+                              </span>
+                            </div>
+
+                            <div
+                              style={{
+                                height: "4px",
+                                borderRadius: "4px",
+                                background: "rgba(255,255,255,0.08)",
+                                overflow: "hidden",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  height: "100%",
+                                  width: `${item.confidence * 100}%`,
+                                  borderRadius: "4px",
+                                  background:
+                                    "linear-gradient(90deg, rgba(140,120,255,0.9), rgba(90,200,255,0.9))",
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Row 4: AI response (clamped to 2 lines) */}
+                        {item.response && (
+                          <div
+                            style={{
+                              marginTop: "8px",
+                              fontSize: "12px",
+                              color: "rgba(255,255,255,0.8)",
+                              lineHeight: "1.4",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <span
+                              style={{
+                                color: "rgba(255,255,255,0.45)",
+                              }}
+                            >
+                              AI:{" "}
+                            </span>
+                            {item.response}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                </div>
               </div>
             )}
           </div>

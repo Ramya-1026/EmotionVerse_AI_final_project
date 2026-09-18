@@ -23,15 +23,14 @@ print("Local LLM loaded successfully!")
 
 def generate_response(message, emotion, history):
 
-    # Only keep the latest 2 memories
-    recent_history = history[:2]
+    # Only keep the latest 1 memory (smaller prompt = faster prefill)
+    recent_history = history[:1]
 
     history_text = ""
 
     for record in recent_history:
         history_text += (
             f"User: {record.get('message', '')}\n"
-            f"Emotion: {record.get('emotion', '')}\n"
             f"Assistant: {record.get('response', '')}\n"
         )
 
@@ -43,8 +42,7 @@ Memory:
 User: {message}
 Emotion: {emotion}
 
-Reply naturally in ONE short sentence.
-Be supportive.
+Reply in ONE short supportive sentence.
 Do not mention databases or internal systems.
 Do not diagnose medical conditions.
 """
@@ -66,7 +64,7 @@ Do not diagnose medical conditions.
         text,
         return_tensors="pt",
         truncation=True,
-        max_length=256
+        max_length=128
     )
 
     with torch.inference_mode():
