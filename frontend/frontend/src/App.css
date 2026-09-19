@@ -96,8 +96,6 @@ textarea {
   align-items: center;
 
   justify-content: space-between;
-
-  overflow: visible;
 }
 
 /* =====================================================
@@ -141,8 +139,6 @@ textarea {
     rgba(255, 255, 255, 0.45);
 
   letter-spacing: 0.4px;
-
-  white-space: nowrap;
 }
 
 /* =====================================================
@@ -312,7 +308,7 @@ textarea {
   justify-content: flex-start;
 
   padding:
-    12px 38px 35px;
+    0 38px 35px;
 }
 
 /* =====================================================
@@ -1005,7 +1001,7 @@ textarea {
 
   .experience {
     padding:
-      12px 20px 50px;
+      0 20px 50px;
   }
 
   .chat-panel {
@@ -1040,7 +1036,7 @@ textarea {
     justify-content: center;
 
     padding:
-      12px 14px 45px;
+      0 14px 45px;
   }
 
   .chat-panel {
