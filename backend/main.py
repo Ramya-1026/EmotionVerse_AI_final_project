@@ -2,11 +2,23 @@ import sys
 from pathlib import Path
 from datetime import datetime, timezone
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pymongo import MongoClient
+from bson import ObjectId
 from llm import generate_response
+
+from auth import (
+    register_user,
+    login_user,
+    logout_user,
+    get_username_from_token,
+    set_memory_pin,
+    has_memory_pin,
+    verify_memory_pin,
+)
+
 
 
 # -----------------------------
@@ -33,9 +45,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class ChatRequest(BaseModel):
     userId: str
     message: str
+
+
+class AuthRequest(BaseModel):
+    username: str
+    password: str
+
+
+class PinRequest(BaseModel):
+    userId: str
+    pin: str
+
 
 
 # -----------------------------
@@ -50,14 +74,188 @@ emotion_collection = db["emotion_history"]
 
 
 # -----------------------------
+# Helpers
+# -----------------------------
+
+def serialize_record(record):
+    """Convert a Mongo record into JSON-safe dict."""
+    record["_id"] = str(record["_id"])
+    return record
+
+
+# -----------------------------
+# Emotion correction layer
+# -----------------------------
+
+POSITIVE_HINTS = [
+    "passed", "pass", "cleared", "topped", "won", "win",
+    "selected", "placed", "got the job", "promotion",
+    "congratulations", "achieved", "result", "exam", "grade",
+    "distinction", "rank", "success", "achievement", "prize",
+    "award", "celebrate", "celebration", "birthday", "wedding",
+    "engaged", "date", "trip", "holiday", "vacation",
+]
+
+NEGATIVE_HINTS = [
+    "failed", "fail", "lost", "broke up", "breakup", "rejected",
+    "ignored", "alone", "lonely", "cry", "crying", "hurt",
+    "scolded", "fight", "argued", "miss", "missing", "died",
+    "funeral", "sick", "hospital", "divorce",
+]
+
+ANGRY_HINTS = [
+    "angry", "furious", "hate", "unfair", "cheated", "betrayed",
+    "rude", "annoyed", "irritated", "frustrated",
+]
+
+FEAR_HINTS = [
+    "scared", "afraid", "terrified", "worried", "anxious",
+    "nervous", "panic", "dread",
+]
+
+
+def correct_emotion(message, emotion, confidence):
+    """Nudge obvious cases the classifier misses."""
+
+    text = (message or "").lower()
+
+    if confidence >= 0.75:
+        return emotion, confidence
+
+    def has(hints):
+        return any(h in text for h in hints)
+
+    if has(FEAR_HINTS):
+        return "fear", max(confidence, 0.75)
+
+    if has(ANGRY_HINTS):
+        return "anger", max(confidence, 0.75)
+
+    if has(NEGATIVE_HINTS):
+        return "sadness", max(confidence, 0.75)
+
+    if has(POSITIVE_HINTS):
+        return "joy", max(confidence, 0.75)
+
+    return emotion, confidence
+
+# -----------------------------
+# Memory PIN
+# -----------------------------
+
+def require_pin(userId: str, pin: str):
+    """Raise if the PIN is missing or wrong."""
+
+    if not has_memory_pin(userId):
+        raise HTTPException(
+            status_code=403,
+            detail="No PIN set. Create one first."
+        )
+
+    if not verify_memory_pin(userId, pin):
+        raise HTTPException(
+            status_code=403,
+            detail="Incorrect PIN."
+        )
+
+
+@app.get("/api/memory/pin/status/{user_id}")
+def pin_status(user_id: str):
+    return {"hasPin": has_memory_pin(user_id)}
+
+
+@app.post("/api/memory/pin/set")
+def create_pin(request: PinRequest):
+
+    success, message = set_memory_pin(
+        request.userId,
+        request.pin
+    )
+
+    if not success:
+        raise HTTPException(status_code=400, detail=message)
+
+    return {"success": True, "message": message}
+
+
+@app.post("/api/memory/pin/verify")
+def check_pin(request: PinRequest):
+
+    if not has_memory_pin(request.userId):
+        raise HTTPException(
+            status_code=403,
+            detail="No PIN set. Create one first."
+        )
+
+    if not verify_memory_pin(request.userId, request.pin):
+        raise HTTPException(status_code=403, detail="Incorrect PIN.")
+
+    return {"success": True}
+
+
+# -----------------------------
 # Home
 # -----------------------------
 
 @app.get("/")
 def home():
+    return {"message": "EmotionVerse AI backend is running!"}
+
+
+# -----------------------------
+# Auth
+# -----------------------------
+
+@app.post("/api/register")
+def register(request: AuthRequest):
+
+    success, message = register_user(
+        request.username,
+        request.password
+    )
+
+    return {"success": success, "message": message}
+
+
+@app.post("/api/login")
+def login(request: AuthRequest):
+
+    success, result = login_user(
+        request.username,
+        request.password
+    )
+
+    if not success:
+        return {"success": False, "message": result}
+
     return {
-        "message": "EmotionVerse AI backend is running!"
+        "success": True,
+        "token": result,
+        "username": request.username.strip().lower()
     }
+
+
+@app.post("/api/logout")
+def logout(authorization: str = Header(default="")):
+
+    token = authorization.replace("Bearer ", "").strip()
+
+    logout_user(token)
+
+    return {"success": True}
+
+
+@app.get("/api/me")
+def me(authorization: str = Header(default="")):
+
+    token = authorization.replace("Bearer ", "").strip()
+
+    username = get_username_from_token(token)
+
+    if not username:
+        return {"success": False, "username": None}
+
+    return {"success": True, "username": username}
 
 
 # -----------------------------
@@ -73,11 +271,16 @@ def chat(request: ChatRequest):
     # 1. Detect current emotion
     emotion, confidence = predict_emotion(message)
 
+    # 1b. Nudge obvious cases the classifier misses
+    emotion, confidence = correct_emotion(
+        message, emotion, confidence
+    )
+
     # 2. Get previous emotion history
     previous_records = emotion_collection.find(
         {"userId": userId},
         {"_id": 0}
-    ).sort("timestamp", -1).limit(5)
+    ).sort("timestamp", -1).limit(15)
 
     history = list(previous_records)
 
@@ -97,7 +300,8 @@ def chat(request: ChatRequest):
         "emotion": emotion,
         "confidence": confidence,
         "response": response,
-        "timestamp": timestamp
+        "timestamp": timestamp,
+        "locked": False,
     }
 
     emotion_collection.insert_one(emotion_data)
@@ -112,15 +316,93 @@ def chat(request: ChatRequest):
         "timestamp": timestamp
     }
 
+
+# -----------------------------
+# History
+# -----------------------------
+
 @app.get("/api/emotions/{user_id}")
 def get_emotions(user_id: str):
 
     records = emotion_collection.find(
-        {"userId": user_id},
-        {"_id": 0}
+        {"userId": user_id}
     ).sort("timestamp", -1)
 
     return {
         "userId": user_id,
-        "history": list(records)
+        "history": [serialize_record(r) for r in records]
     }
+
+
+@app.delete("/api/emotions/{user_id}/{record_id}")
+def delete_emotion(user_id: str, record_id: str):
+
+    try:
+        object_id = ObjectId(record_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid record id")
+
+    record = emotion_collection.find_one(
+        {"_id": object_id, "userId": user_id}
+    )
+
+    if not record:
+        raise HTTPException(status_code=404, detail="Record not found")
+
+    if record.get("locked"):
+        raise HTTPException(
+            status_code=403,
+            detail="This memory is locked. Unlock it first."
+        )
+
+    emotion_collection.delete_one({"_id": object_id})
+
+    return {"success": True, "deleted": record_id}
+
+
+class DeleteRequest(BaseModel):
+    pin: str
+
+
+@app.delete("/api/emotions/{user_id}/{record_id}")
+def delete_emotion(user_id: str, record_id: str, request: DeleteRequest):
+
+    require_pin(user_id, request.pin)
+
+    try:
+        object_id = ObjectId(record_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid record id")
+
+
+
+class LockRequest(BaseModel):
+    pin: str
+
+
+@app.patch("/api/emotions/{user_id}/{record_id}/lock")
+def toggle_lock(user_id: str, record_id: str, request: LockRequest):
+
+    require_pin(user_id, request.pin)
+
+    try:
+        object_id = ObjectId(record_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid record id")
+
+
+    record = emotion_collection.find_one(
+        {"_id": object_id, "userId": user_id}
+    )
+
+    if not record:
+        raise HTTPException(status_code=404, detail="Record not found")
+
+    new_state = not bool(record.get("locked"))
+
+    emotion_collection.update_one(
+        {"_id": object_id},
+        {"$set": {"locked": new_state}}
+    )
+
+    return {"success": True, "locked": new_state}

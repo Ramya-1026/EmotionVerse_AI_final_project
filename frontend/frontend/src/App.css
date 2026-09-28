@@ -86,10 +86,10 @@ textarea {
 
   z-index: 30;
 
-  height: 76px;
+  height: 80px;
 
   padding:
-    18px 32px;
+    20px 36px;
 
   display: flex;
 
@@ -107,13 +107,13 @@ textarea {
 
   align-items: center;
 
-  gap: 12px;
+  gap: 13px;
 }
 
 .brand h1 {
   margin: 0;
 
-  font-size: 18px;
+  font-size: 21px;
 
   font-weight: 700;
 
@@ -131,12 +131,12 @@ textarea {
 }
 
 .brand p {
-  margin: 3px 0 0;
+  margin: 4px 0 0;
 
-  font-size: 9px;
+  font-size: 11px;
 
   color:
-    rgba(255, 255, 255, 0.45);
+    rgba(255, 255, 255, 0.5);
 
   letter-spacing: 0.4px;
 }
@@ -148,8 +148,8 @@ textarea {
 .brand-orbit {
   position: relative;
 
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
 
   border-radius: 50%;
 
@@ -173,7 +173,7 @@ textarea {
 
   position: absolute;
 
-  inset: 7px;
+  inset: 8px;
 
   border-radius: 50%;
 
@@ -185,11 +185,11 @@ textarea {
 .brand-orbit span {
   position: absolute;
 
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 
   top: -2px;
-  left: 14px;
+  left: 16px;
 
   border-radius: 50%;
 
@@ -207,13 +207,13 @@ textarea {
   from {
     transform:
       rotate(0deg)
-      translateX(13px);
+      translateX(15px);
   }
 
   to {
     transform:
       rotate(360deg)
-      translateX(13px);
+      translateX(15px);
   }
 }
 
@@ -237,10 +237,10 @@ textarea {
 
   align-items: center;
 
-  gap: 7px;
+  gap: 8px;
 
   padding:
-    7px 11px;
+    8px 14px;
 
   border-radius: 999px;
 
@@ -253,17 +253,17 @@ textarea {
 
   backdrop-filter: blur(12px);
 
-  font-size: 8px;
+  font-size: 10px;
 
   letter-spacing: 1px;
 
   color:
-    rgba(255, 255, 255, 0.6);
+    rgba(255, 255, 255, 0.65);
 }
 
 .status-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 
   border-radius: 50%;
 
@@ -299,7 +299,7 @@ textarea {
   width: 100%;
 
   height:
-    calc(100vh - 76px);
+    calc(100vh - 80px);
 
   display: flex;
 
@@ -308,7 +308,7 @@ textarea {
   justify-content: flex-start;
 
   padding:
-    0 38px 35px;
+    0 42px 40px;
 }
 
 /* =====================================================
@@ -320,12 +320,9 @@ textarea {
 
   z-index: 20;
 
-  width: 350px;
+  width: 430px;
 
-  margin-left: 10px;
-
-  transform:
-    translateY(10px);
+  margin-left: 20px;
 
   animation:
     panelAppear 0.8s ease;
@@ -336,16 +333,14 @@ textarea {
     opacity: 0;
 
     transform:
-      translateX(-25px)
-      translateY(10px);
+      translateX(-25px);
   }
 
   to {
     opacity: 1;
 
     transform:
-      translateX(0)
-      translateY(10px);
+      translateX(0);
   }
 }
 
@@ -358,7 +353,14 @@ textarea {
 
   width: 100%;
 
-  border-radius: 20px;
+  max-height:
+    calc(100vh - 140px);
+
+  display: flex;
+
+  flex-direction: column;
+
+  border-radius: 22px;
 
   padding: 1px;
 
@@ -393,7 +395,7 @@ textarea {
 
   inset: 1px;
 
-  border-radius: 19px;
+  border-radius: 21px;
 
   background:
     linear-gradient(
@@ -415,7 +417,7 @@ textarea {
 
   inset: -2px;
 
-  border-radius: 22px;
+  border-radius: 24px;
 
   background:
     linear-gradient(
@@ -438,10 +440,10 @@ textarea {
 .card-glow {
   position: absolute;
 
-  width: 170px;
-  height: 70px;
+  width: 190px;
+  height: 80px;
 
-  top: -35px;
+  top: -40px;
 
   left: 50%;
 
@@ -469,10 +471,12 @@ textarea {
 
   align-items: center;
 
-  gap: 10px;
+  gap: 12px;
 
   padding:
-    14px 16px;
+    16px 18px;
+
+  flex-shrink: 0;
 
   border-bottom:
     1px solid
@@ -480,8 +484,8 @@ textarea {
 }
 
 .ai-avatar {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
 
   flex-shrink: 0;
 
@@ -490,7 +494,7 @@ textarea {
   align-items: center;
   justify-content: center;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
   background:
     linear-gradient(
@@ -503,7 +507,7 @@ textarea {
     1px solid
     rgba(175, 145, 255, 0.35);
 
-  font-size: 17px;
+  font-size: 19px;
 
   box-shadow:
     0 0 18px
@@ -513,18 +517,18 @@ textarea {
 .chat-header h3 {
   margin: 0;
 
-  font-size: 12px;
+  font-size: 15px;
 
   font-weight: 600;
 }
 
 .chat-header p {
-  margin: 3px 0 0;
+  margin: 4px 0 0;
 
-  font-size: 8px;
+  font-size: 10px;
 
   color:
-    rgba(255, 255, 255, 0.4);
+    rgba(255, 255, 255, 0.45);
 }
 
 /* =====================================================
@@ -533,27 +537,12 @@ textarea {
 
 .response-area {
   padding:
-    12px 15px 2px;
+    14px 18px 4px;
 
-  max-height: 180px;
-
-  overflow-y: auto;
-
-  scrollbar-width: thin;
+  flex-shrink: 0;
 
   animation:
     responseAppear 0.5s ease;
-}
-
-.response-area::-webkit-scrollbar {
-  width: 3px;
-}
-
-.response-area::-webkit-scrollbar-thumb {
-  background:
-    rgba(160, 130, 255, 0.4);
-
-  border-radius: 10px;
 }
 
 /* =====================================================
@@ -565,14 +554,14 @@ textarea {
 
   align-items: center;
 
-  gap: 9px;
+  gap: 11px;
 
   width: fit-content;
 
   padding:
-    7px 10px;
+    8px 13px;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
   background:
     rgba(255, 255, 255, 0.045);
@@ -583,24 +572,24 @@ textarea {
 }
 
 .emotion-icon {
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .emotion-badge small {
   display: block;
 
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 
-  font-size: 7px;
+  font-size: 9px;
 
   letter-spacing: 1.4px;
 
   color:
-    rgba(255, 255, 255, 0.38);
+    rgba(255, 255, 255, 0.42);
 }
 
 .emotion-badge strong {
-  font-size: 11px;
+  font-size: 14px;
 
   text-transform: capitalize;
 
@@ -613,7 +602,7 @@ textarea {
 ===================================================== */
 
 .confidence {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .confidence-top {
@@ -621,23 +610,23 @@ textarea {
 
   justify-content: space-between;
 
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 
-  font-size: 8px;
+  font-size: 10px;
 
   color:
-    rgba(255, 255, 255, 0.42);
+    rgba(255, 255, 255, 0.48);
 }
 
 .confidence-top span:last-child {
   color:
-    rgba(194, 179, 255, 0.8);
+    rgba(194, 179, 255, 0.85);
 }
 
 .confidence-bar {
   width: 100%;
 
-  height: 3px;
+  height: 4px;
 
   border-radius: 10px;
 
@@ -672,12 +661,12 @@ textarea {
 ===================================================== */
 
 .ai-message {
-  margin-top: 10px;
+  margin-top: 12px;
 
   padding:
-    10px 12px;
+    13px 15px;
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background:
     rgba(115, 85, 190, 0.08);
@@ -688,25 +677,25 @@ textarea {
 }
 
 .message-label {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 
-  font-size: 7px;
+  font-size: 9px;
 
   letter-spacing: 1.6px;
 
   color:
-    rgba(181, 159, 255, 0.55);
+    rgba(181, 159, 255, 0.6);
 }
 
 .ai-message p {
   margin: 0;
 
-  font-size: 10px;
+  font-size: 13px;
 
-  line-height: 1.55;
+  line-height: 1.6;
 
   color:
-    rgba(255, 255, 255, 0.78);
+    rgba(255, 255, 255, 0.85);
 }
 
 /* =====================================================
@@ -715,13 +704,15 @@ textarea {
 
 .input-area {
   padding:
-    12px 15px 14px;
+    14px 18px 16px;
+
+  flex-shrink: 0;
 }
 
 .input-area textarea {
   width: 100%;
 
-  min-height: 65px;
+  min-height: 68px;
 
   resize: none;
 
@@ -731,17 +722,17 @@ textarea {
     1px solid
     rgba(255, 255, 255, 0.09);
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   padding:
-    11px 12px;
+    12px 14px;
 
   background:
     rgba(0, 0, 0, 0.25);
 
   color: white;
 
-  font-size: 10px;
+  font-size: 13px;
 
   line-height: 1.5;
 
@@ -752,7 +743,7 @@ textarea {
 
 .input-area textarea::placeholder {
   color:
-    rgba(255, 255, 255, 0.28);
+    rgba(255, 255, 255, 0.32);
 }
 
 .input-area textarea:focus {
@@ -775,14 +766,14 @@ textarea {
 
   justify-content: space-between;
 
-  margin-top: 7px;
+  margin-top: 9px;
 }
 
 .hint {
-  font-size: 7px;
+  font-size: 10px;
 
   color:
-    rgba(255, 255, 255, 0.25);
+    rgba(255, 255, 255, 0.3);
 }
 
 /* =====================================================
@@ -794,22 +785,22 @@ textarea {
 
   align-items: center;
 
-  gap: 8px;
+  gap: 9px;
 
   border: none;
 
   outline: none;
 
   padding:
-    8px 13px;
+    10px 18px;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   cursor: pointer;
 
   color: white;
 
-  font-size: 9px;
+  font-size: 12px;
 
   font-weight: 600;
 
@@ -846,12 +837,12 @@ textarea {
 }
 
 .send-icon {
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .loader {
-  width: 9px;
-  height: 9px;
+  width: 11px;
+  height: 11px;
 
   border-radius: 50%;
 
@@ -883,7 +874,7 @@ textarea {
 
   right: 7%;
 
-  bottom: 12%;
+  bottom: 14%;
 
   display: flex;
 
@@ -895,22 +886,22 @@ textarea {
 
   text-align: right;
 
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 .universe-label span {
-  font-size: 8px;
+  font-size: 10px;
 
   letter-spacing: 3px;
 
   color:
-    rgba(190, 170, 255, 0.55);
+    rgba(190, 170, 255, 0.6);
 }
 
 .universe-label strong {
-  margin-top: 4px;
+  margin-top: 5px;
 
-  font-size: 16px;
+  font-size: 22px;
 
   letter-spacing: 2px;
 
@@ -929,14 +920,14 @@ textarea {
 }
 
 .universe-label small {
-  margin-top: 4px;
+  margin-top: 5px;
 
-  font-size: 7px;
+  font-size: 9px;
 
   letter-spacing: 1.5px;
 
   color:
-    rgba(255, 255, 255, 0.3);
+    rgba(255, 255, 255, 0.35);
 }
 
 /* =====================================================
@@ -948,7 +939,7 @@ textarea {
 
   z-index: 30;
 
-  bottom: 10px;
+  bottom: 12px;
 
   left: 50%;
 
@@ -959,21 +950,21 @@ textarea {
 
   align-items: center;
 
-  gap: 7px;
+  gap: 8px;
 
   white-space: nowrap;
 
-  font-size: 7px;
+  font-size: 10px;
 
   letter-spacing: 0.7px;
 
   color:
-    rgba(255, 255, 255, 0.23);
+    rgba(255, 255, 255, 0.28);
 }
 
 .separator {
   color:
-    rgba(180, 150, 255, 0.4);
+    rgba(180, 150, 255, 0.45);
 }
 
 /* =====================================================
@@ -993,19 +984,35 @@ textarea {
   }
 }
 
+@keyframes responseAppear {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
 /* =====================================================
    MOBILE
 ===================================================== */
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
 
   .experience {
     padding:
-      0 20px 50px;
+      0 24px 55px;
   }
 
   .chat-panel {
-    width: 330px;
+    width: 400px;
   }
 
   .universe-label {
@@ -1013,15 +1020,15 @@ textarea {
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 680px) {
 
   .top-bar {
     padding:
-      15px 17px;
+      16px 18px;
   }
 
   .brand h1 {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .brand p {
@@ -1029,19 +1036,19 @@ textarea {
   }
 
   .status-pill {
-    font-size: 7px;
+    font-size: 9px;
   }
 
   .experience {
     justify-content: center;
 
     padding:
-      0 14px 45px;
+      0 14px 50px;
   }
 
   .chat-panel {
     width:
-      min(350px, 92vw);
+      min(420px, 94vw);
 
     margin-left: 0;
   }
@@ -1053,4 +1060,1018 @@ textarea {
   .bottom-bar {
     display: none;
   }
+}
+/* =====================================================
+   AUTH SCREEN
+===================================================== */
+
+.auth-screen {
+  position: relative;
+
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background:
+    radial-gradient(
+      circle at 62% 42%,
+      rgba(120, 70, 230, 0.22),
+      transparent 46%
+    ),
+    radial-gradient(
+      circle at 30% 78%,
+      rgba(60, 160, 230, 0.14),
+      transparent 52%
+    ),
+    #010108;
+}
+
+.auth-card {
+  position: relative;
+
+  z-index: 5;
+
+  width: 100%;
+  max-width: 430px;
+
+  padding: 34px 32px 28px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(12, 10, 28, 0.94),
+      rgba(8, 7, 20, 0.9)
+    );
+
+  border:
+    1px solid
+    rgba(160, 130, 255, 0.22);
+
+  box-shadow:
+    0 30px 80px
+      rgba(0, 0, 0, 0.7),
+
+    0 0 55px
+      rgba(115, 75, 220, 0.22);
+
+  overflow: hidden;
+}
+
+.auth-brand {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 26px;
+}
+
+.auth-brand h1 {
+  margin: 0;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #b8a7ff,
+      #75d8ff
+    );
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-brand p {
+  margin: 4px 0 0;
+
+  font-size: 10px;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+}
+
+.auth-title {
+  margin: 0;
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+  color: #ffffff;
+}
+
+.auth-subtitle {
+  margin: 7px 0 22px;
+
+  font-size: 12px;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+}
+
+.auth-form {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.auth-label {
+  margin-bottom: 7px;
+
+  font-size: 11px;
+
+  letter-spacing: 0.6px;
+
+  color:
+    rgba(255, 255, 255, 0.55);
+}
+
+.auth-input {
+  margin-bottom: 16px;
+
+  padding: 12px 14px;
+
+  border-radius: 12px;
+
+  outline: none;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  background:
+    rgba(0, 0, 0, 0.35);
+
+  color: white;
+
+  font-size: 13px;
+
+  transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.auth-input::placeholder {
+  color:
+    rgba(255, 255, 255, 0.28);
+}
+
+.auth-input:focus {
+  border-color:
+    rgba(150, 120, 255, 0.5);
+
+  box-shadow:
+    0 0 20px
+      rgba(120, 80, 230, 0.15);
+}
+
+.auth-error {
+  margin-bottom: 14px;
+
+  padding: 10px 12px;
+
+  border-radius: 10px;
+
+  font-size: 11.5px;
+
+  color: #ffb4b4;
+
+  background:
+    rgba(220, 60, 60, 0.12);
+
+  border:
+    1px solid
+    rgba(255, 110, 110, 0.25);
+}
+
+.auth-info {
+  margin-bottom: 14px;
+
+  padding: 10px 12px;
+
+  border-radius: 10px;
+
+  font-size: 11.5px;
+
+  color: #9ef5cd;
+
+  background:
+    rgba(60, 220, 140, 0.1);
+
+  border:
+    1px solid
+    rgba(100, 255, 180, 0.22);
+}
+
+.auth-button {
+  margin-top: 4px;
+
+  padding: 13px 18px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.4px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7652dc,
+      #3d9ed6
+    );
+
+  box-shadow:
+    0 10px 26px
+      rgba(101, 74, 210, 0.35);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.auth-button:hover:not(:disabled) {
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 14px 30px
+      rgba(101, 74, 210, 0.5);
+}
+
+.auth-button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 12px;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+}
+
+.auth-switch button {
+  border: none;
+
+  background: none;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #b8a7ff;
+
+  transition:
+    color 0.2s ease;
+}
+
+.auth-switch button:hover {
+  color: #75d8ff;
+}
+
+/* =====================================================
+   TOP RIGHT (user + logout)
+===================================================== */
+
+.top-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.user-pill {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  border:
+    1px solid
+    rgba(170, 140, 255, 0.22);
+
+  background:
+    rgba(60, 40, 110, 0.22);
+
+  backdrop-filter: blur(12px);
+
+  font-size: 11px;
+
+  letter-spacing: 0.5px;
+
+  color:
+    rgba(255, 255, 255, 0.75);
+
+  text-transform: capitalize;
+}
+
+.user-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #b8a7ff;
+
+  box-shadow:
+    0 0 8px #b8a7ff;
+}
+
+.logout-button {
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  color:
+    rgba(255, 255, 255, 0.8);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+
+  background:
+    rgba(255, 255, 255, 0.05);
+
+  transition:
+    background 0.2s ease,
+    border 0.2s ease,
+    color 0.2s ease;
+}
+
+.logout-button:hover {
+  background:
+    rgba(255, 90, 90, 0.16);
+
+  border-color:
+    rgba(255, 120, 120, 0.35);
+
+  color: #ffc9c9;
+}
+/* =====================================================
+   MEMORY TOGGLE (header)
+===================================================== */
+
+.memory-toggle {
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+
+  color:
+    rgba(255, 255, 255, 0.78);
+
+  border:
+    1px solid
+    rgba(170, 140, 255, 0.22);
+
+  background:
+    rgba(60, 40, 110, 0.22);
+
+  backdrop-filter: blur(12px);
+
+  transition:
+    background 0.2s ease,
+    border 0.2s ease,
+    color 0.2s ease;
+}
+
+.memory-toggle:hover {
+  border-color:
+    rgba(170, 140, 255, 0.45);
+
+  color: #ffffff;
+}
+
+.memory-toggle.active {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(118, 82, 220, 0.45),
+      rgba(61, 158, 214, 0.35)
+    );
+
+  border-color:
+    rgba(180, 150, 255, 0.5);
+
+  color: #ffffff;
+}
+
+/* =====================================================
+   MEMORY SIDEBAR
+===================================================== */
+
+.memory-sidebar {
+  position: fixed;
+
+  top: 0;
+  right: 0;
+
+  z-index: 40;
+
+  width: 360px;
+  height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 22px 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(10, 8, 24, 0.96),
+      rgba(7, 6, 18, 0.94)
+    );
+
+  border-left:
+    1px solid
+    rgba(160, 130, 255, 0.18);
+
+  box-shadow:
+    -25px 0 70px
+      rgba(0, 0, 0, 0.6);
+
+  backdrop-filter: blur(22px);
+
+  transform:
+    translateX(105%);
+
+  transition:
+    transform 0.35s ease;
+
+  pointer-events: none;
+}
+
+.memory-sidebar.open {
+  transform:
+    translateX(0);
+
+  pointer-events: auto;
+}
+
+.memory-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding-bottom: 16px;
+
+  margin-bottom: 14px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+.memory-header h4 {
+  margin: 0;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #ffffff;
+}
+
+.memory-header p {
+  margin: 5px 0 0;
+
+  font-size: 10.5px;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+}
+
+.memory-close {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  color:
+    rgba(255, 255, 255, 0.7);
+
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.memory-close:hover {
+  background:
+    rgba(255, 90, 90, 0.18);
+
+  color: #ffc9c9;
+}
+
+.memory-list {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding-right: 6px;
+}
+
+.memory-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.memory-list::-webkit-scrollbar-thumb {
+  background:
+    rgba(160, 130, 255, 0.35);
+
+  border-radius: 10px;
+}
+
+.memory-empty {
+  margin-top: 30px;
+
+  padding: 18px;
+
+  text-align: center;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+
+  color:
+    rgba(255, 255, 255, 0.4);
+
+  border-radius: 12px;
+
+  border:
+    1px dashed
+    rgba(255, 255, 255, 0.12);
+}
+
+.memory-item {
+  margin-bottom: 10px;
+
+  padding: 12px 13px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+}
+
+.memory-item-top {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.memory-emotion {
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color:
+    rgba(255, 255, 255, 0.92);
+
+  text-transform: capitalize;
+}
+
+.memory-time {
+  font-size: 10px;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+}
+
+.memory-message {
+  margin-top: 7px;
+
+  font-size: 12px;
+
+  color:
+    rgba(255, 255, 255, 0.72);
+}
+
+.memory-confidence {
+  margin-top: 9px;
+}
+
+.memory-confidence-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 4px;
+
+  font-size: 10px;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+}
+
+.memory-confidence-bar {
+  height: 4px;
+
+  border-radius: 4px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  overflow: hidden;
+}
+
+.memory-confidence-fill {
+  height: 100%;
+
+  border-radius: 4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(140, 120, 255, 0.9),
+      rgba(90, 200, 255, 0.9)
+    );
+}
+
+.memory-response {
+  margin-top: 9px;
+
+  font-size: 12px;
+
+  line-height: 1.45;
+
+  color:
+    rgba(255, 255, 255, 0.8);
+}
+
+.memory-response-label {
+  color:
+    rgba(255, 255, 255, 0.45);
+}
+/* =====================================================
+   MEMORY ACTIONS (lock + delete)
+===================================================== */
+
+.memory-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.memory-lock,
+.memory-delete {
+  width: 26px;
+  height: 26px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  line-height: 1;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  background:
+    rgba(255, 255, 255, 0.05);
+
+  transition:
+    background 0.2s ease,
+    border 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.memory-lock:hover {
+  background:
+    rgba(160, 130, 255, 0.22);
+
+  border-color:
+    rgba(170, 140, 255, 0.45);
+}
+
+.memory-lock.on {
+  background:
+    rgba(255, 200, 90, 0.18);
+
+  border-color:
+    rgba(255, 210, 120, 0.45);
+}
+
+.memory-delete:hover:not(:disabled) {
+  background:
+    rgba(255, 90, 90, 0.18);
+
+  border-color:
+    rgba(255, 120, 120, 0.4);
+}
+
+.memory-delete:disabled {
+  opacity: 0.3;
+
+  cursor: not-allowed;
+}
+
+/* Locked memory card gets a warm border */
+.memory-item.locked {
+  border-color:
+    rgba(255, 205, 110, 0.28);
+
+  background:
+    rgba(255, 205, 110, 0.045);
+}
+
+.memory-clear {
+  width: 100%;
+
+  margin-bottom: 12px;
+
+  padding: 9px 12px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  color: #ffc9c9;
+
+  border:
+    1px solid
+    rgba(255, 120, 120, 0.25);
+
+  background:
+    rgba(255, 80, 80, 0.1);
+
+  transition:
+    background 0.2s ease,
+    border 0.2s ease;
+}
+
+.memory-clear:hover {
+  background:
+    rgba(255, 80, 80, 0.2);
+
+  border-color:
+    rgba(255, 130, 130, 0.45);
+}
+/* =====================================================
+   PIN MODAL
+===================================================== */
+
+.pin-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 60;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(2, 2, 10, 0.72);
+
+  backdrop-filter: blur(8px);
+}
+
+.pin-card {
+  width: 100%;
+  max-width: 340px;
+
+  padding: 24px 22px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(12, 10, 28, 0.98),
+      rgba(8, 7, 20, 0.96)
+    );
+
+  border:
+    1px solid
+    rgba(160, 130, 255, 0.25);
+
+  box-shadow:
+    0 25px 70px
+      rgba(0, 0, 0, 0.7);
+}
+
+.pin-card h3 {
+  margin: 0;
+
+  font-size: 16px;
+
+  color: #ffffff;
+}
+
+.pin-sub {
+  margin: 8px 0 16px;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+}
+
+.pin-input {
+  width: 100%;
+
+  margin-bottom: 10px;
+
+  padding: 11px 13px;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  background: rgba(0, 0, 0, 0.35);
+
+  color: white;
+
+  font-size: 14px;
+
+  letter-spacing: 3px;
+}
+
+.pin-input::placeholder {
+  letter-spacing: normal;
+
+  color:
+    rgba(255, 255, 255, 0.3);
+}
+
+.pin-input:focus {
+  border-color:
+    rgba(150, 120, 255, 0.5);
+}
+
+.pin-error {
+  margin: 6px 0 4px;
+
+  font-size: 12px;
+
+  color: #ffb4b4;
+}
+
+.pin-actions {
+  display: flex;
+
+  gap: 9px;
+
+  margin-top: 12px;
+}
+
+.pin-cancel,
+.pin-submit {
+  flex: 1;
+
+  padding: 11px 14px;
+
+  border-radius: 11px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  border: none;
+}
+
+.pin-cancel {
+  color:
+    rgba(255, 255, 255, 0.75);
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+.pin-submit {
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7652dc,
+      #3d9ed6
+    );
+}
+
+.pin-submit:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
 }
