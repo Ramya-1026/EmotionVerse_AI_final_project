@@ -1,7 +1,9 @@
+import os
 import sys
 from pathlib import Path
 from datetime import datetime, timezone
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -17,8 +19,10 @@ from auth import (
     set_memory_pin,
     has_memory_pin,
     verify_memory_pin,
+    set_password,
 )
 
+load_dotenv()
 
 
 # -----------------------------
@@ -39,7 +43,10 @@ app = FastAPI(title="EmotionVerse AI")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "[localhost](http://localhost:5173)",
+        "[127.0.0.1](http://127.0.0.1:5173)",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -61,12 +68,31 @@ class PinRequest(BaseModel):
     pin: str
 
 
+class DeleteRequest(BaseModel):
+    pin: str
+
+
+class LockRequest(BaseModel):
+    pin: str
+
+
+class UnlockRequest(BaseModel):
+    pin: str
+
+
+class ResetRequest(BaseModel):
+    username: str
+    pin: str
+    newPassword: str
+
 
 # -----------------------------
 # MongoDB
 # -----------------------------
 
-client = MongoClient("mongodb://localhost:27017/")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+
+client = MongoClient(MONGO_URI)
 
 db = client["emotionverse"]
 
@@ -139,6 +165,7 @@ def correct_emotion(message, emotion, confidence):
 
     return emotion, confidence
 
+
 # -----------------------------
 # Memory PIN
 # -----------------------------
@@ -181,14 +208,7 @@ def create_pin(request: PinRequest):
 @app.post("/api/memory/pin/verify")
 def check_pin(request: PinRequest):
 
-    if not has_memory_pin(request.userId):
-        raise HTTPException(
-            status_code=403,
-            detail="No PIN set. Create one first."
-        )
-
-    if not verify_memory_pin(request.userId, request.pin):
-        raise HTTPException(status_code=403, detail="Incorrect PIN.")
+    require_pin(request.userId, request.pin)
 
     return {"success": True}
 
@@ -256,6 +276,32 @@ def me(authorization: str = Header(default="")):
         return {"success": False, "username": None}
 
     return {"success": True, "username": username}
+
+
+# -----------------------------
+# Forgot password (PIN verified)
+# -----------------------------
+
+@app.post("/api/reset-password")
+def reset_password(request: ResetRequest):
+
+    username = request.username.strip().lower()
+
+    if not has_memory_pin(username):
+        raise HTTPException(
+            status_code=403,
+            detail="No PIN set on this account. Contact support."
+        )
+
+    if not verify_memory_pin(username, request.pin):
+        raise HTTPException(status_code=403, detail="Incorrect PIN.")
+
+    success, message = set_password(username, request.newPassword)
+
+    if not success:
+        raise HTTPException(status_code=400, detail=message)
+
+    return {"success": True, "message": message}
 
 
 # -----------------------------
@@ -328,14 +374,28 @@ def get_emotions(user_id: str):
         {"userId": user_id}
     ).sort("timestamp", -1)
 
+    result = []
+
+    for record in records:
+        record = serialize_record(record)
+
+        if record.get("locked"):
+            # Locked content never leaves the server
+            record["message"] = None
+            record["response"] = None
+
+        result.append(record)
+
     return {
         "userId": user_id,
-        "history": [serialize_record(r) for r in records]
+        "history": result
     }
 
 
 @app.delete("/api/emotions/{user_id}/{record_id}")
-def delete_emotion(user_id: str, record_id: str):
+def delete_emotion(user_id: str, record_id: str, request: DeleteRequest):
+
+    require_pin(user_id, request.pin)
 
     try:
         object_id = ObjectId(record_id)
@@ -349,36 +409,26 @@ def delete_emotion(user_id: str, record_id: str):
     if not record:
         raise HTTPException(status_code=404, detail="Record not found")
 
-    if record.get("locked"):
-        raise HTTPException(
-            status_code=403,
-            detail="This memory is locked. Unlock it first."
-        )
-
     emotion_collection.delete_one({"_id": object_id})
 
     return {"success": True, "deleted": record_id}
 
 
-class DeleteRequest(BaseModel):
-    pin: str
+@app.delete("/api/emotions/{user_id}")
+def clear_unlocked(user_id: str):
+    """Delete every unlocked memory for this user."""
+
+    emotion_collection.delete_many({
+        "userId": user_id,
+        "locked": {"$ne": True},
+    })
+
+    return {"success": True}
 
 
-@app.delete("/api/emotions/{user_id}/{record_id}")
-def delete_emotion(user_id: str, record_id: str, request: DeleteRequest):
-
-    require_pin(user_id, request.pin)
-
-    try:
-        object_id = ObjectId(record_id)
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid record id")
-
-
-
-class LockRequest(BaseModel):
-    pin: str
-
+# -----------------------------
+# Lock / unlock
+# -----------------------------
 
 @app.patch("/api/emotions/{user_id}/{record_id}/lock")
 def toggle_lock(user_id: str, record_id: str, request: LockRequest):
@@ -389,7 +439,6 @@ def toggle_lock(user_id: str, record_id: str, request: LockRequest):
         object_id = ObjectId(record_id)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid record id")
-
 
     record = emotion_collection.find_one(
         {"_id": object_id, "userId": user_id}
@@ -406,3 +455,24 @@ def toggle_lock(user_id: str, record_id: str, request: LockRequest):
     )
 
     return {"success": True, "locked": new_state}
+
+
+@app.post("/api/emotions/{user_id}/{record_id}/unlock")
+def unlock_emotion(user_id: str, record_id: str, request: UnlockRequest):
+    """Return the real content of one locked memory, after PIN check."""
+
+    require_pin(user_id, request.pin)
+
+    try:
+        object_id = ObjectId(record_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid record id")
+
+    record = emotion_collection.find_one(
+        {"_id": object_id, "userId": user_id}
+    )
+
+    if not record:
+        raise HTTPException(status_code=404, detail="Record not found")
+
+    return {"success": True, "record": serialize_record(record)}

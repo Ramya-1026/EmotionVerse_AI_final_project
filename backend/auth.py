@@ -1,15 +1,21 @@
+import os
 from datetime import datetime, timezone
 import secrets
 import bcrypt
 
+from dotenv import load_dotenv
 from pymongo import MongoClient
+
+load_dotenv()
 
 
 # -----------------------------
 # MongoDB (same database as chat)
 # -----------------------------
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(
+    os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+)
 
 db = client["emotionverse"]
 
@@ -144,6 +150,8 @@ def logout_user(token: str):
     """Remove a token (user logs out)."""
     if token:
         tokens_collection.delete_one({"token": token})
+
+
 # -----------------------------
 # Memory PIN (privacy lock)
 # -----------------------------
@@ -197,3 +205,31 @@ def verify_memory_pin(username: str, pin: str) -> bool:
         return False
 
     return verify_password(pin, user["memoryPin"])
+
+
+# -----------------------------
+# Password reset (PIN verified)
+# -----------------------------
+
+def set_password(username: str, new_password: str):
+    """Replace a password. Caller must verify the PIN first."""
+
+    if not new_password or len(new_password) < 4:
+        return False, "Password must be at least 4 characters."
+
+    clean = username.lower()
+
+    user = users_collection.find_one({"username": clean})
+
+    if not user:
+        return False, "User not found."
+
+    users_collection.update_one(
+        {"username": clean},
+        {"$set": {"password": hash_password(new_password)}}
+    )
+
+    # Kill every existing session for this user
+    tokens_collection.delete_many({"username": clean})
+
+    return True, "Password updated. Please log in again."

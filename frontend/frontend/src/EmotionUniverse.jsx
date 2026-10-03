@@ -593,8 +593,9 @@ function EmotionUniverse({ emotion, history }) {
 
     const journeyClusters = [];
 
-    const JOURNEY_RADIUS_START = 10.5;
-    const JOURNEY_RADIUS_STEP = 1.35;
+    const JOURNEY_RADIUS_START = 4.5;
+    const JOURNEY_RADIUS_STEP = 0.5;
+
 
     const journeyPoints = [];
 
@@ -722,7 +723,7 @@ function EmotionUniverse({ emotion, history }) {
 
       label.sprite.position.set(px, labelBaseY, pz);
 
-      const labelScale = 3.4;
+      const labelScale = 2.4;
 
       label.sprite.scale.set(labelScale, labelScale, 1);
 
@@ -745,24 +746,37 @@ function EmotionUniverse({ emotion, history }) {
     });
 
     // --- Constellation lines joining the journey ---
-    let journeyLine = null;
+   let journeyLine = null;
 
     if (journeyPoints.length > 1) {
+      // Smooth curve through the points instead of hard straight chords
+      const curve = new THREE.CatmullRomCurve3(
+        journeyPoints,
+        false,
+        "catmullrom",
+        0.5
+      );
+
+      const smoothPoints = curve.getPoints(
+        Math.max(64, journeyPoints.length * 24)
+      );
+
       const lineGeometry =
-        new THREE.BufferGeometry().setFromPoints(journeyPoints);
+        new THREE.BufferGeometry().setFromPoints(smoothPoints);
 
       const lineMaterial = new THREE.LineBasicMaterial({
         color: new THREE.Color("#d0c2ff"),
         transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending,
+        opacity: 0.45,
         depthWrite: false,
+        depthTest: false,
       });
 
       journeyLine = new THREE.Line(lineGeometry, lineMaterial);
 
       journeyGroup.add(journeyLine);
     }
+
 
     // ==================================================
     // ANIMATION
@@ -888,14 +902,14 @@ function EmotionUniverse({ emotion, history }) {
           );
 
           entry.labelMaterial.opacity =
-            0.78 +
+            0.45 +
             Math.sin(time * 0.8 + entry.phase) * 0.18;
         }
       });
 
       if (journeyLine) {
         journeyLine.material.opacity =
-          0.45 + Math.sin(time * 0.7) * 0.15;
+          0.65 + Math.sin(time * 0.7) * 0.15;
       }
 
       // ----------------------------------------------
